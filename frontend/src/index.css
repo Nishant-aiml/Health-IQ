@@ -1,0 +1,87 @@
+/* ──────────────────────────────────────────────────────────────
+   HealthLens AI — Clean Light Theme UI
+   Simple, Modern Healthcare Aesthetics
+   ────────────────────────────────────────────────────────────── */
+
+@import "@fontsource/inter/300.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-page: #f8fafc;
+    --bg-card: #ffffff;
+    --border-color: #e2e8f0;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --primary-teal: #0d9488;
+    --primary-emerald: #059669;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background-color: var(--bg-page);
+    color: var(--text-main);
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  .light-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .light-card:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  }
+
+  .btn-primary-light {
+    background-color: #0d9488;
+    color: #ffffff;
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 10px 20px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(13, 148, 136, 0.2);
+  }
+  .btn-primary-light:hover {
+    background-color: #0f766e;
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+  }
+
+  .btn-outline-light {
+    background-color: #ffffff;
+    color: #0d9488;
+    font-weight: 600;
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 10px 20px;
+    transition: all 0.2s ease;
+  }
+  .btn-outline-light:hover {
+    background-color: #f1f5f9;
+    border-color: #94a3b8;
+  }
+}

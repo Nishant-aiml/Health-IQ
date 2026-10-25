@@ -1,0 +1,55 @@
+# --------------------------------------------------
+# File: brands.py
+# Purpose: Brand name to generic drug mapping dictionary.
+# Module: Medicine Knowledge / Brand Mapping
+# Used By: Brand Resolver & Medicine Registry
+# Future Phase: Phase 3A Medicine Intelligence
+# --------------------------------------------------
+
+BRAND_TO_GENERIC_MAP = {
+    "glycomet": "metformin",
+    "gluformin": "metformin",
+    "glucophage": "metformin",
+    "obimet": "metformin",
+    "augmentin": "amoxicillin",
+    "mox": "amoxicillin",
+    "amoxil": "amoxicillin",
+    "novamox": "amoxicillin",
+    "lipitor": "atorvastatin",
+    "atorva": "atorvastatin",
+    "atocor": "atorvastatin",
+    "stator": "atorvastatin",
+    "norvasc": "amlodipine",
+    "amlong": "amlodipine",
+    "amdepin": "amlodipine",
+    "stamlo": "amlodipine",
+    "pantocid": "pantoprazole",
+    "pan40": "pantoprazole",
+    "pantodac": "pantoprazole",
+    "protera": "pantoprazole",
+    "prilosec": "omeprazole",
+    "omizac": "omeprazole",
+    "zegerid": "omeprazole",
+    "zithromax": "azithromycin",
+    "azee": "azithromycin",
+    "azithral": "azithromycin",
+    "aziwok": "azithromycin",
+    "telma": "telmisartan",
+    "telmikind": "telmisartan",
+    "telsar": "telmisartan",
+    "micardis": "telmisartan",
+    "dolo": "paracetamol",
+    "crocin": "paracetamol",
+    "tylenol": "paracetamol",
+    "calpol": "paracetamol",
+    "pacimol": "paracetamol",
+    "cetzine": "cetirizine",
+    "zyrtec": "cetirizine",
+    "okacet": "cetirizine",
+    "eltroxin": "levothyroxine",
+    "thyronorm": "levothyroxine",
+    "synthroid": "levothyroxine",
+    "disprin": "aspirin",
+    "ecosprin": "aspirin",
+    "bayer": "aspirin",
+}
