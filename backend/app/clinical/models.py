@@ -27,6 +27,17 @@ class AudienceTarget(str, Enum):
     PATIENT = "Patient-Friendly"
     FAMILY = "Family-Friendly"
 
+    @classmethod
+    def _missing_(cls, value: Any):
+        val = str(value).lower()
+        if "doc" in val:
+            return cls.DOCTOR
+        if "pat" in val:
+            return cls.PATIENT
+        if "fam" in val:
+            return cls.FAMILY
+        return None
+
 
 class EvidenceNode(BaseModel):
     source_type: str = Field(..., description="lab_result | trend | recommendation | nutrition | clinical_summary")
