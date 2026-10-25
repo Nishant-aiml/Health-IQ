@@ -16,9 +16,14 @@ import backend.app.models  # noqa: F401
 
 
 def get_normalized_db_url(url: str) -> str:
-    """Normalizes database URLs for SQLAlchemy 2.0 and cloud providers like Render."""
+    """
+    Normalizes database URLs for SQLAlchemy 2.0 / 2.1 and cloud providers like Render.
+    Explicitly specifies the psycopg2 driver to eliminate dialect ambiguity across Python versions.
+    """
     if url.startswith("postgres://"):
-        url = url.replace("postgres://", "postgresql://", 1)
+        url = url.replace("postgres://", "postgresql+psycopg2://", 1)
+    elif url.startswith("postgresql://") and "+" not in url.split("://")[0]:
+        url = url.replace("postgresql://", "postgresql+psycopg2://", 1)
     return url
 
 
