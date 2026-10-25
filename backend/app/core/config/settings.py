@@ -21,6 +21,7 @@ class Settings(BaseSettings):
 
     # Database Settings
     DATABASE_URL: str = "sqlite:///./health_companion.db"
+    DB_FALLBACK_TO_SQLITE: bool = False
 
     # Security & CORS Settings
     CORS_ORIGINS: List[str] = [
