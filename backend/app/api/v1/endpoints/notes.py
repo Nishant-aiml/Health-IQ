@@ -27,11 +27,14 @@ async def create_note_endpoint(
     return BaseResponse(success=True, data=data.model_dump(), message="Clinical note saved successfully.")
 
 
-@router.get("", summary="Get Clinical Notes for Report")
+@router.get("", summary="Get Clinical Notes for Report or User")
 async def get_notes_endpoint(
-    report_id: int = Query(1),
+    report_id: Optional[int] = Query(None),
+    user_id: Optional[int] = Query(None),
     db_session: Session = Depends(get_db_session),
 ):
-    """Retrieves all clinical observations and notes associated with a specific report."""
-    data = clinical_note_service.get_notes(db_session, report_id)
+    """Retrieves all clinical observations and notes associated with a specific report or user."""
+    # If neither specified, default to report_id=1
+    target_report_id = report_id if (report_id is not None or user_id is not None) else 1
+    data = clinical_note_service.get_notes(db_session, report_id=target_report_id, user_id=user_id)
     return BaseResponse(success=True, data=[n.model_dump() for n in data], message="Clinical notes retrieved.")

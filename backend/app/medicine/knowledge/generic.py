@@ -139,4 +139,15 @@ GENERIC_DRUGS = {
         "adult_dosage": "75mg - 150mg once daily with food",
         "side_effects": ["Gastric irritation", "Increased bleeding risk", "Heartburn", "Nausea"],
     },
+    "ibuprofen": {
+        "generic_name": "Ibuprofen",
+        "active_ingredient": "Ibuprofen",
+        "drug_class": "Nonsteroidal Anti-inflammatory Drug (NSAID)",
+        "category": "Musculoskeletal / Pain Management",
+        "purpose": "Relieves inflammatory pain, joint stiffness, headaches, and reduces fever.",
+        "mechanism": "Reversibly inhibits COX-1 and COX-2 enzymes, decreasing prostaglandin synthesis.",
+        "common_uses": ["Osteoarthritis", "Rheumatoid Arthritis", "Joint & Muscle Pain", "Dysmenorrhea", "Headache"],
+        "adult_dosage": "200mg - 400mg every 6 to 8 hours with food",
+        "side_effects": ["Dyspepsia (indigestion)", "Gastric mucosal ulceration", "Nausea", "Fluid retention"],
+    },
 }

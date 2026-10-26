@@ -1,0 +1,10 @@
+PRESCRIPTION / Rx
+Patient: John Doe | Age: 38 | Date: 25-Oct-2026
+Diagnosis: Impaired Fasting Glucose, Dyslipidemia, Mild Knee Joint Pain
+
+Rx:
+1. Tab. Glycomet 500mg - 1 tablet twice daily with meals (Breakfast & Dinner)
+2. Tab. Lipitor 20mg - 1 tablet once daily at bedtime
+3. Tab. Ecosprin 75mg - 1 tablet once daily after breakfast
+4. Tab. Brufen 400mg - 1 tablet as needed for severe joint pain
+5. Cap. Pan-D - 1 capsule once daily 30 minutes before breakfast

@@ -246,6 +246,39 @@ export const UploadPage: React.FC = () => {
           </button>
         </div>
 
+        {/* Sample Demo Data Quick-Bar */}
+        <div className="bg-teal-50/70 border border-teal-200 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+          <div className="flex items-center gap-2 text-teal-900 font-medium">
+            <Sparkles className="w-4 h-4 text-teal-600 shrink-0" />
+            <span>Need a test file? Try our pre-loaded lab report or download sample files:</span>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => {
+                setMode('text');
+                setPastedText(`METROPOLIS CLINICAL HEALTHCARE LABORATORIES\nPatient Name: John Doe | Age: 38 Years | Gender: Male\nReferred By: Dr. R. Sharma, MD | Date: 25-Oct-2026\n\nCOMPLETE BLOOD COUNT (CBC) & METABOLIC INVESTIGATION:\n------------------------------------------------------------\nHemoglobin                   11.2 g/dL       (Ref: 13.8 - 17.2)   [LOW]\nFasting Blood Sugar (FBS)    128.0 mg/dL     (Ref: 70.0 - 99.0)   [HIGH]\nHbA1c Glycated Hemoglobin    6.8 %           (Ref: 4.0 - 5.6)     [HIGH]\nTotal Cholesterol            245.0 mg/dL     (Ref: 125.0 - 200.0) [HIGH]\nTriglycerides                195.0 mg/dL     (Ref: 50.0 - 150.0)  [HIGH]\nHDL (Good) Cholesterol       38.0 mg/dL      (Ref: > 40.0)        [LOW]\nLDL (Bad) Cholesterol        168.0 mg/dL     (Ref: < 100.0)       [HIGH]\nSerum Creatinine             0.95 mg/dL      (Ref: 0.70 - 1.30)   [NORMAL]\nSerum Calcium                7.8 mg/dL       (Ref: 8.5 - 10.2)    [LOW]\nVitamin D (25-OH)            14.2 ng/mL      (Ref: 30.0 - 100.0)  [LOW]\nTotal Platelet Count         240000 /mcL     (Ref: 150k - 450k)   [NORMAL]\nTotal WBC Count              7400 /mcL       (Ref: 4,000 - 11,000)[NORMAL]\n------------------------------------------------------------\nImpression: Mild microcytic anemia, impaired fasting glucose (prediabetes), and atherogenic dyslipidemia.`);
+              }}
+              className="px-3 py-1.5 rounded-lg bg-teal-600 hover:bg-teal-700 text-white font-bold shadow-sm"
+            >
+              Fill Sample Text
+            </button>
+            <a
+              href="/sample_data/sample_lab_report.pdf"
+              download="sample_lab_report.pdf"
+              className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-medium"
+            >
+              Sample PDF
+            </a>
+            <a
+              href="/sample_data/sample_lab_report.png"
+              download="sample_lab_report.png"
+              className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 font-medium"
+            >
+              Sample Image
+            </a>
+          </div>
+        </div>
+
         {error && (
           <div className="flex items-center gap-2 p-4 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs font-medium">
             <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />

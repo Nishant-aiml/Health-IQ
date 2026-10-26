@@ -24,8 +24,9 @@ def parse_lab_line(line_text: str) -> Optional[Dict[str, Any]]:
     Returns:
         Dict with `raw_name`, `raw_value`, `raw_unit` if matched, else None.
     """
-    # Regex pattern matching: Parameter Name : Value Unit
-    pattern = r"([A-Za-z0-9\s\(\)\-\_]+)[:\s\.]+(\d+\.?\d*)\s*([A-Za-z\/\%\^\d]+)"
+    # Regex pattern matching: Parameter Name [: whitespace] Value Unit
+    # Uses non-greedy name matching to prevent consuming integer parts of decimal values
+    pattern = r"^\s*([A-Za-z][A-Za-z0-9\s\(\)\-\_\/]*?)\s*[:=\t\s\.\-]+\s*(\d+(?:\.\d+)?)\s*([A-Za-z\/\%\^\d]+)"
     match = re.search(pattern, line_text)
     
     if match:
@@ -33,6 +34,10 @@ def parse_lab_line(line_text: str) -> Optional[Dict[str, Any]]:
         raw_val_str = match.group(2).strip()
         raw_unit = match.group(3).strip()
         
+        # Filter out noisy lines like dates or IDs
+        if raw_name.lower() in ("date", "sample collected", "report finalized", "iso", "time", "id", "page"):
+            return None
+
         try:
             val_float = float(raw_val_str)
             return {

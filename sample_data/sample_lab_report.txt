@@ -1,0 +1,20 @@
+METROPOLIS CLINICAL HEALTHCARE LABORATORIES
+Patient Name: John Doe | Age: 38 Years | Gender: Male
+Referred By: Dr. R. Sharma, MD | Date: 25-Oct-2026
+
+COMPLETE BLOOD COUNT (CBC) & METABOLIC INVESTIGATION:
+------------------------------------------------------------
+Hemoglobin                   11.2 g/dL       (Ref: 13.8 - 17.2)   [LOW]
+Fasting Blood Sugar (FBS)    128.0 mg/dL     (Ref: 70.0 - 99.0)   [HIGH]
+HbA1c Glycated Hemoglobin    6.8 %           (Ref: 4.0 - 5.6)     [HIGH]
+Total Cholesterol            245.0 mg/dL     (Ref: 125.0 - 200.0) [HIGH]
+Triglycerides                195.0 mg/dL     (Ref: 50.0 - 150.0)  [HIGH]
+HDL (Good) Cholesterol       38.0 mg/dL      (Ref: > 40.0)        [LOW]
+LDL (Bad) Cholesterol        168.0 mg/dL     (Ref: < 100.0)       [HIGH]
+Serum Creatinine             0.95 mg/dL      (Ref: 0.70 - 1.30)   [NORMAL]
+Serum Calcium                7.8 mg/dL       (Ref: 8.5 - 10.2)    [LOW]
+Vitamin D (25-OH)            14.2 ng/mL      (Ref: 30.0 - 100.0)  [LOW]
+Total Platelet Count         240000 /mcL     (Ref: 150k - 450k)   [NORMAL]
+Total WBC Count              7400 /mcL       (Ref: 4,000 - 11,000)[NORMAL]
+------------------------------------------------------------
+Impression: Mild microcytic anemia, impaired fasting glucose (prediabetes), and atherogenic dyslipidemia.

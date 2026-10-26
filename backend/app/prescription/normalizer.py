@@ -10,8 +10,10 @@ import re
 
 
 def normalize_prescription_line(line: str) -> str:
-    """Cleans OCR artifacts and standardizes prescription text lines."""
+    """Cleans OCR artifacts, leading bullets, and standardizes prescription text lines."""
     line = re.sub(r"\s+", " ", line).strip()
+    # Strip leading list numbers or bullets: "1.", "1)", "1 -", "-", "*", etc.
+    line = re.sub(r"^\s*(?:\d+[\.\)\-:]|\-|\*)\s*", "", line)
     return line
 
 

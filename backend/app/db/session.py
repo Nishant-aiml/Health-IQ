@@ -74,6 +74,13 @@ def init_db(max_retries: int = 5, retry_delay: float = 3.0) -> None:
             logger.info(f"Connecting to database [attempt {attempt}/{max_retries}] at {safe_target}...")
             SQLModel.metadata.create_all(engine)
             logger.info("Database connection verified and schemas initialized successfully.")
+            # Seed baseline patient dataset if database is empty
+            try:
+                from backend.app.db.seed import seed_database_if_empty
+                with Session(engine) as seed_session:
+                    seed_database_if_empty(seed_session)
+            except Exception as seed_err:
+                logger.warning(f"Seed initialization note: {seed_err}")
             return
         except Exception as exc:
             last_exception = exc
@@ -96,6 +103,12 @@ def init_db(max_retries: int = 5, retry_delay: float = 3.0) -> None:
         )
         SQLModel.metadata.create_all(engine)
         logger.warning("Initialized fallback SQLite database schemas successfully.")
+        try:
+            from backend.app.db.seed import seed_database_if_empty
+            with Session(engine) as seed_session:
+                seed_database_if_empty(seed_session)
+        except Exception as seed_err:
+            logger.warning(f"Seed initialization note: {seed_err}")
         return
 
     # Otherwise raise error with actionable troubleshooting details

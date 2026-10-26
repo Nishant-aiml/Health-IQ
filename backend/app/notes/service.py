@@ -28,8 +28,8 @@ class ClinicalNoteService:
             created_at=note.created_at.isoformat(),
         )
 
-    def get_notes(self, session: Session, report_id: int) -> List[ClinicalNoteResponse]:
-        notes = clinical_note_repository.get_notes_for_report(session, report_id)
+    def get_notes(self, session: Session, report_id: Optional[int] = None, user_id: Optional[int] = None) -> List[ClinicalNoteResponse]:
+        notes = clinical_note_repository.get_notes(session, report_id=report_id, user_id=user_id)
         return [
             ClinicalNoteResponse(
                 id=n.id,

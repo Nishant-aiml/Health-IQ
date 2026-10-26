@@ -52,4 +52,10 @@ BRAND_TO_GENERIC_MAP = {
     "disprin": "aspirin",
     "ecosprin": "aspirin",
     "bayer": "aspirin",
+    "brufen": "ibuprofen",
+    "advil": "ibuprofen",
+    "motrin": "ibuprofen",
+    "pan-d": "pantoprazole",
+    "pan d": "pantoprazole",
+    "pand": "pantoprazole",
 }

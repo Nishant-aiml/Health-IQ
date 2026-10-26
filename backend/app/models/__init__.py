@@ -23,6 +23,7 @@ from backend.app.models.historical_report import HistoricalReport
 from backend.app.models.historical_parameter import HistoricalParameter
 from backend.app.models.timeline_event import TimelineEvent, TimelineEventType
 from backend.app.models.share import SharedProfile
+from backend.app.notes.models import ClinicalNote, NoteType
 
 __all__ = [
     "User",
@@ -44,4 +45,6 @@ __all__ = [
     "TimelineEvent",
     "TimelineEventType",
     "SharedProfile",
+    "ClinicalNote",
+    "NoteType",
 ]

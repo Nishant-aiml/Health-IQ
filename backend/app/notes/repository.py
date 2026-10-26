@@ -21,9 +21,17 @@ class ClinicalNoteRepository:
         session.refresh(db_note)
         return db_note
 
-    def get_notes_for_report(self, session: Session, report_id: int) -> List[ClinicalNote]:
-        statement = select(ClinicalNote).where(ClinicalNote.report_id == report_id).order_by(ClinicalNote.created_at.desc())
+    def get_notes(self, session: Session, report_id: Optional[int] = None, user_id: Optional[int] = None) -> List[ClinicalNote]:
+        statement = select(ClinicalNote)
+        if report_id is not None:
+            statement = statement.where(ClinicalNote.report_id == report_id)
+        elif user_id is not None:
+            statement = statement.where(ClinicalNote.user_id == user_id)
+        statement = statement.order_by(ClinicalNote.created_at.desc())
         return list(session.exec(statement).all())
+
+    def get_notes_for_report(self, session: Session, report_id: int) -> List[ClinicalNote]:
+        return self.get_notes(session, report_id=report_id)
 
 
 clinical_note_repository = ClinicalNoteRepository()

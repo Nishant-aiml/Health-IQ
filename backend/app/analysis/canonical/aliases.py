@@ -5,6 +5,7 @@
 # Used By: Report Normalizer
 # --------------------------------------------------
 
+import re
 from typing import Dict, Optional
 
 # Standard Dictionary of Lab Parameter Synonym Aliases
@@ -37,22 +38,32 @@ CANONICAL_ALIASES: Dict[str, str] = {
     "ppbs": "Postprandial Blood Sugar",
     "hba1c": "HbA1c",
     "glycated hemoglobin": "HbA1c",
+    "glycohemoglobin": "HbA1c",
 
     # Lipid Profile
-    "cholesterol": "Total Cholesterol",
-    "total cholesterol": "Total Cholesterol",
-    "triglycerides": "Triglycerides",
-    "tg": "Triglycerides",
     "hdl": "HDL Cholesterol",
     "hdl cholesterol": "HDL Cholesterol",
+    "hdl-c": "HDL Cholesterol",
     "ldl": "LDL Cholesterol",
     "ldl cholesterol": "LDL Cholesterol",
+    "ldl-c": "LDL Cholesterol",
+    "vldl": "VLDL Cholesterol",
+    "triglycerides": "Triglycerides",
+    "tg": "Triglycerides",
+    "total cholesterol": "Total Cholesterol",
+    "cholesterol": "Total Cholesterol",
 
-    # Kidney Function
+    # Kidney & Electrolytes
     "creatinine": "Serum Creatinine",
     "serum creatinine": "Serum Creatinine",
     "bun": "Blood Urea Nitrogen",
     "urea": "Blood Urea",
+    "calcium": "Serum Calcium",
+    "serum calcium": "Serum Calcium",
+    "vitamin d": "Vitamin D (25-OH)",
+    "vitamin d (25-oh)": "Vitamin D (25-OH)",
+    "25-oh vitamin d": "Vitamin D (25-OH)",
+    "25-hydroxy vitamin d": "Vitamin D (25-OH)",
 
     # Thyroid Function
     "tsh": "Thyroid Stimulating Hormone",
@@ -76,9 +87,21 @@ def resolve_canonical_name(raw_name: str) -> Optional[str]:
     if cleaned_key in CANONICAL_ALIASES:
         return CANONICAL_ALIASES[cleaned_key]
 
-    # Partial / substring match fallback
-    for key, canonical_name in CANONICAL_ALIASES.items():
-        if key in cleaned_key or cleaned_key in key:
+    # Specific biomarker token shortcuts
+    words = set(re.findall(r"\w+", cleaned_key))
+    if "hdl" in words:
+        return "HDL Cholesterol"
+    if "ldl" in words:
+        return "LDL Cholesterol"
+    if "vldl" in words:
+        return "VLDL Cholesterol"
+    if "hba1c" in words or "a1c" in words:
+        return "HbA1c"
+
+    # Partial / substring match fallback (prioritize longer, specific keys first)
+    sorted_items = sorted(CANONICAL_ALIASES.items(), key=lambda x: len(x[0]), reverse=True)
+    for key, canonical_name in sorted_items:
+        if len(key) >= 3 and (key in cleaned_key or (len(cleaned_key) >= 4 and cleaned_key in key)):
             return canonical_name
 
     return None

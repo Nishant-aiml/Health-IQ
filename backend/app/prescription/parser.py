@@ -61,6 +61,10 @@ class PrescriptionParser:
                     med_name = med_name.replace(duration_match.group(0), "")
 
                 med_name = re.sub(r"^(tab|cap|syr|inj|ointment)\.?\s*", "", med_name, flags=re.IGNORECASE)
+                # Split instructions or trailing dash notes from medicine name
+                med_name = re.split(r"\s*[-–—:]\s*|\s+(?:with|after|before|take|daily|at\s+bedtime|as\s+needed)\b", med_name, flags=re.IGNORECASE)[0].strip()
+                # Remove parenthetical active ingredients if present (e.g. "Lipitor (Atorvastatin)" -> "Lipitor")
+                med_name = re.sub(r"\(.*?\)", "", med_name).strip()
                 med_name = re.sub(r"[^\w\s-]", "", med_name).strip()
 
                 if not med_name:

@@ -205,20 +205,46 @@ export const PrescriptionPage: React.FC = () => {
             {analyzeError && (
               <p className="text-xs text-red-600 font-medium">{analyzeError}</p>
             )}
-            <div className="flex justify-end gap-2">
-              <button
-                onClick={() => setShowUploadModal(false)}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleAnalyzePaste}
-                disabled={analyzing}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-teal-600 hover:bg-teal-700 disabled:opacity-50 flex items-center gap-2"
-              >
-                {analyzing ? 'Analyzing...' : 'Parse Prescription'}
-              </button>
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPasteText(
+                      "Tab. Glycomet 500mg - 1 tablet twice daily with meals\n" +
+                      "Tab. Lipitor 20mg - 1 tablet once daily at bedtime\n" +
+                      "Tab. Ecosprin 75mg - 1 tablet once daily after breakfast\n" +
+                      "Tab. Brufen 400mg - 1 tablet twice daily as needed for pain\n" +
+                      "Cap. Pan-D - 1 capsule once daily before breakfast"
+                    );
+                  }}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold text-teal-700 bg-teal-50 hover:bg-teal-100 border border-teal-200 flex items-center gap-1.5"
+                >
+                  <Sparkles className="w-3.5 h-3.5" /> Fill Sample Rx
+                </button>
+                <a
+                  href="/sample_data/sample_prescription.pdf"
+                  download="sample_prescription.pdf"
+                  className="px-3 py-1.5 rounded-lg text-xs font-medium text-slate-700 bg-slate-50 hover:bg-slate-100 border border-slate-200"
+                >
+                  Download Sample Rx PDF
+                </a>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setShowUploadModal(false)}
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleAnalyzePaste}
+                  disabled={analyzing}
+                  className="px-4 py-2 rounded-xl text-xs font-bold text-white bg-teal-600 hover:bg-teal-700 disabled:opacity-50 flex items-center gap-2"
+                >
+                  {analyzing ? 'Analyzing...' : 'Parse Prescription'}
+                </button>
+              </div>
             </div>
           </div>
         )}
