@@ -39,6 +39,7 @@ class GroundedChatEngine:
         report_analysis: Dict[str, Any],
         recommendation_bundle: Dict[str, Any],
         conversation_id: str = None,
+        language: str = "en",
     ) -> ChatResponse:
         conv_id = conversation_id or f"conv_{uuid.uuid4().hex[:8]}"
 
@@ -66,7 +67,7 @@ class GroundedChatEngine:
         messages.append({"role": "user", "content": question})
 
         # Step 6: Call Grounded LLM Provider
-        llm_res = await grounded_llm_provider.generate_chat_completion(messages)
+        llm_res = await grounded_llm_provider.generate_chat_completion(messages, language=language)
         answer_text = llm_res["content"]
 
         # Step 7: Citation Generation
@@ -94,7 +95,7 @@ class GroundedChatEngine:
             for c in chunks
         ]
 
-        logger.info(f"Grounded chat response generated for conv_id '{conv_id}' with {len(citations)} citations.")
+        logger.info(f"Grounded chat response generated for conv_id '{conv_id}' with {len(citations)} citations in '{language}'.")
 
         return ChatResponse(
             answer=answer_text,
@@ -104,6 +105,7 @@ class GroundedChatEngine:
             used_patterns=used_patterns,
             used_recommendations=used_recs,
             conversation_id=conv_id,
+            language=language,
         )
 
 

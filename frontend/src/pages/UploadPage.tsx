@@ -48,6 +48,7 @@ export const UploadPage: React.FC = () => {
   const [batchId, setBatchId] = useState<string | null>(null);
   const [jobStatuses, setJobStatuses] = useState<JobStatus[]>([]);
   const [currentStageIdx, setCurrentStageIdx] = useState(0);
+  const [isAllDone, setIsAllDone] = useState(false);
 
   const addFiles = useCallback((incomingFiles: FileList | File[]) => {
     const valid: FileItem[] = [];
@@ -88,6 +89,7 @@ export const UploadPage: React.FC = () => {
   const pollStatus = async (bId: string, jobIds: number[], filenames: string[]) => {
     const statuses: JobStatus[] = jobIds.map((id, i) => ({ job_id: id, status: 'queued', filename: filenames[i] }));
     setJobStatuses([...statuses]);
+    setIsAllDone(false);
 
     let allDone = false;
     let attempts = 0;
@@ -105,9 +107,12 @@ export const UploadPage: React.FC = () => {
         if (jobs.length > 0) {
           setJobStatuses(jobs.map((j: any, i: number) => ({ ...j, filename: filenames[i] || j.filename || `File ${i + 1}` })));
           allDone = jobs.every((j: any) => j.status === 'completed' || j.status === 'failed');
-          const completed = jobs.find((j: any) => j.status === 'completed');
-          if (completed?.report_id && allDone) {
-            setTimeout(() => navigate(`/reports/${completed.report_id}`), 800);
+          if (allDone) {
+            setIsAllDone(true);
+            const completed = jobs.find((j: any) => j.status === 'completed');
+            if (filenames.length === 1 && completed?.report_id) {
+              setTimeout(() => navigate(`/reports/${completed.report_id}`), 1000);
+            }
           }
         }
       } catch {
@@ -211,6 +216,109 @@ export const UploadPage: React.FC = () => {
               );
             })}
           </div>
+
+          {/* Individual Document Progress in Batch */}
+          {jobStatuses.length > 0 && (
+            <div className="space-y-2 pt-1">
+              <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center justify-between">
+                <span>Batch Documents ({jobStatuses.length})</span>
+                <span className="text-teal-600 font-semibold">
+                  {jobStatuses.filter(j => j.status === 'completed').length} of {jobStatuses.length} Complete
+                </span>
+              </h4>
+              <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
+                {jobStatuses.map((job, idx) => (
+                  <div key={job.job_id || idx} className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex items-center justify-between">
+                    <div className="flex items-center gap-2.5">
+                      <FileText className="w-4 h-4 text-teal-600 shrink-0" />
+                      <div>
+                        <p className="text-xs font-bold text-slate-900 truncate max-w-[200px] sm:max-w-[260px]">
+                          {job.filename}
+                        </p>
+                        <p className="text-[10px] text-slate-500 capitalize">
+                          Stage: {job.stage || 'queued'}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      {job.status === 'completed' ? (
+                        <div className="flex items-center gap-2">
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                            Ready
+                          </span>
+                          {job.report_id && (
+                            <button
+                              onClick={() => navigate(`/reports/${job.report_id}`)}
+                              className="px-2.5 py-1 rounded-lg text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white shadow-sm"
+                            >
+                              View
+                            </button>
+                          )}
+                        </div>
+                      ) : job.status === 'failed' ? (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-red-800">
+                          Failed
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800 flex items-center gap-1">
+                          <Loader2 className="w-3 h-3 animate-spin" /> In Progress
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Batch Completion Action Panel */}
+          {isAllDone && (
+            <div className="bg-emerald-50 border border-emerald-200 rounded-xl p-4 space-y-3">
+              <div className="flex items-center gap-2 text-emerald-800 font-bold text-sm">
+                <Check className="w-5 h-5 text-emerald-600 shrink-0" /> All Batch Files Processed!
+              </div>
+              <p className="text-xs text-emerald-700 leading-relaxed">
+                Biomarkers extracted and longitudinal health intelligence synchronized.
+              </p>
+              <div className="flex flex-wrap gap-2 pt-1">
+                {jobStatuses.filter(j => j.status === 'completed' && j.report_id).map((j) => (
+                  <button
+                    key={j.job_id}
+                    onClick={() => navigate(`/reports/${j.report_id}`)}
+                    className="px-3 py-1.5 rounded-lg text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white shadow-sm"
+                  >
+                    View {j.filename || `Report #${j.report_id}`}
+                  </button>
+                ))}
+                <button
+                  onClick={() => navigate('/history')}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
+                >
+                  View Trends & History
+                </button>
+                <button
+                  onClick={() => navigate('/clinical')}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold bg-slate-800 hover:bg-slate-900 text-white shadow-sm"
+                >
+                  Doctor Hub
+                </button>
+                <button
+                  onClick={() => { setBatchId(null); setFiles([]); setJobStatuses([]); setIsAllDone(false); }}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-300 text-slate-700 hover:bg-slate-100"
+                >
+                  Upload More
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Cancel/Reset Fallback if stuck */}
+          <button
+            onClick={() => { setBatchId(null); setFiles([]); setJobStatuses([]); setIsAllDone(false); }}
+            className="w-full py-2 rounded-xl text-xs font-bold text-slate-500 hover:text-slate-800 border border-slate-200 hover:bg-slate-50 transition-colors"
+          >
+            ← Cancel & Return to Upload
+          </button>
         </div>
       </div>
     );

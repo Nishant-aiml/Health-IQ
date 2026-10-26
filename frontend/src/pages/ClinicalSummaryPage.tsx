@@ -96,7 +96,7 @@ export default function ClinicalSummaryPage() {
       const res = await fetch('/api/v1/notes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ user_id: userId, ...noteData }),
+        body: JSON.stringify({ user_id: userId, report_id: 1, ...noteData }),
       });
       if (res.ok) {
         const newNote = await res.json();

@@ -6,7 +6,7 @@
 # Future Phase: Phase 2A Ingestion
 # --------------------------------------------------
 
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Depends, UploadFile, File, Form, Query
 from sqlmodel import Session
 from backend.app.api.dependencies import get_db_session
@@ -21,6 +21,7 @@ router = APIRouter(prefix="/documents", tags=["Documents"])
 async def upload_document_batch(
     files: List[UploadFile] = File(...),
     doc_type: str = Form("lab_report"),
+    user_id: Optional[int] = Form(1),
     db_session: Session = Depends(get_db_session),
 ) -> BaseResponse[ReportUploadResponse]:
     """
@@ -31,7 +32,9 @@ async def upload_document_batch(
         contents = await uploaded_file.read()
         files_payload.append((uploaded_file.filename, contents))
 
-    submission_result = await document_service.submit_document_batch(db_session, files_payload, doc_type=doc_type)
+    submission_result = await document_service.submit_document_batch(
+        db_session, files_payload, doc_type=doc_type, user_id=user_id or 1
+    )
 
     return BaseResponse(
         success=True,
@@ -47,13 +50,21 @@ async def upload_document_batch(
 @router.get("/batch/{batch_id}/status", response_model=BaseResponse[List[ReportStatusResponse]], summary="Poll Batch Status")
 async def get_batch_status(
     batch_id: str,
-    job_ids: List[int] = Query(...),
+    job_ids: List[str] = Query(default=[]),
     db_session: Session = Depends(get_db_session),
 ) -> BaseResponse[List[ReportStatusResponse]]:
     """
     Polls real-time per-file processing stage progress for a batch submission.
+    Supports both repeated query params (job_ids=1&job_ids=2) and comma-separated (job_ids=1,2).
     """
-    status_list = document_service.get_batch_status(db_session, batch_id, job_ids)
+    parsed_ids: List[int] = []
+    for raw_item in job_ids:
+        for piece in str(raw_item).split(","):
+            piece = piece.strip()
+            if piece.isdigit():
+                parsed_ids.append(int(piece))
+
+    status_list = document_service.get_batch_status(db_session, batch_id, parsed_ids)
 
     response_items = [
         ReportStatusResponse(

@@ -24,8 +24,9 @@ class ClinicalNote(SQLModel, table=True):
     __tablename__ = "clinical_notes"
 
     id: Optional[int] = Field(default=None, primary_key=True)
-    report_id: int = Field(index=True)
+    report_id: Optional[int] = Field(default=1, index=True)
     user_id: int = Field(default=1, index=True)
+    title: Optional[str] = Field(default="Clinical Note")
     author_name: str = Field(default="Dr. Physician")
     author_role: str = Field(default="Primary Doctor")
     note_type: NoteType = Field(default=NoteType.CLINICAL_OBSERVATION)
@@ -34,20 +35,26 @@ class ClinicalNote(SQLModel, table=True):
 
 
 class ClinicalNoteCreate(BaseModel):
-    report_id: int
-    user_id: int = 1
-    author_name: str = "Dr. Physician"
-    author_role: str = "Primary Doctor"
-    note_type: NoteType = NoteType.CLINICAL_OBSERVATION
+    report_id: Optional[int] = 1
+    user_id: Optional[int] = 1
+    title: Optional[str] = "Clinical Note"
+    author_name: Optional[str] = "Dr. Physician"
+    author_role: Optional[str] = "Primary Doctor"
+    note_type: Optional[NoteType] = NoteType.CLINICAL_OBSERVATION
     content: str
 
 
 class ClinicalNoteResponse(BaseModel):
     id: int
+    note_id: Optional[str] = None
     report_id: int
     user_id: int
+    title: Optional[str] = "Clinical Note"
     author_name: str
     author_role: str
+    note_type: str
+    content: str
+    created_at: str
     note_type: NoteType
     content: str
     created_at: str

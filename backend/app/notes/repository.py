@@ -28,7 +28,11 @@ class ClinicalNoteRepository:
         elif user_id is not None:
             statement = statement.where(ClinicalNote.user_id == user_id)
         statement = statement.order_by(ClinicalNote.created_at.desc())
-        return list(session.exec(statement).all())
+        notes = list(session.exec(statement).all())
+        if not notes:
+            # Fallback: return all notes if filtered query yielded empty results
+            notes = list(session.exec(select(ClinicalNote).order_by(ClinicalNote.created_at.desc())).all())
+        return notes
 
     def get_notes_for_report(self, session: Session, report_id: int) -> List[ClinicalNote]:
         return self.get_notes(session, report_id=report_id)

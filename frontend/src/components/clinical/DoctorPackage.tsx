@@ -25,7 +25,15 @@ interface DoctorPackageProps {
 export const DoctorPackage: React.FC<DoctorPackageProps> = ({ packageData }) => {
   const [showEvidence, setShowEvidence] = useState(false);
 
-  if (!packageData) return null;
+  if (!packageData) {
+    return (
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-8 shadow-xl text-center space-y-3">
+        <FileText className="w-8 h-8 text-teal-400 mx-auto animate-pulse" />
+        <h3 className="text-base font-bold text-slate-100">Loading Clinical Case Package...</h3>
+        <p className="text-xs text-slate-400">Assembling verified biomarker evidence and physician summary.</p>
+      </div>
+    );
+  }
 
   const statusColor: Record<string, string> = {
     'AI Generated': 'bg-teal-500/20 text-teal-300 border-teal-500/30',

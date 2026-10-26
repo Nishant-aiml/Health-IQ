@@ -10,10 +10,12 @@ import React, { useState } from 'react';
 import { MessageSquare, Plus, User, Clock } from 'lucide-react';
 
 interface ClinicalNote {
-  note_id: string;
-  user_id: string;
+  id?: number;
+  note_id?: string;
+  user_id: string | number;
+  report_id?: number;
   note_type: string;
-  title: string;
+  title?: string;
   content: string;
   author_name: string;
   author_role: string;
@@ -121,9 +123,9 @@ export const NotesPanel: React.FC<NotesPanelProps> = ({ notes, onAddNote, userId
           <p className="text-center py-8 text-slate-500 text-sm">No notes yet. Add the first one.</p>
         ) : (
           notes.map((note, idx) => (
-            <div key={idx} className={`p-4 rounded-xl border text-xs space-y-2 ${NOTE_COLORS[note.note_type] || 'bg-slate-950/50 border-slate-700'}`}>
+            <div key={note.note_id || note.id || idx} className={`p-4 rounded-xl border text-xs space-y-2 ${NOTE_COLORS[note.note_type] || 'bg-slate-950/50 border-slate-700'}`}>
               <div className="flex items-center justify-between flex-wrap gap-2">
-                <span className="font-bold text-slate-100">{note.title}</span>
+                <span className="font-bold text-slate-100">{note.title || note.note_type}</span>
                 <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${NOTE_COLORS[note.note_type]}`}>{note.note_type}</span>
               </div>
               <p className="text-slate-300 leading-relaxed">{note.content}</p>

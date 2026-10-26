@@ -37,5 +37,6 @@ async def chat_about_report(
         report_id=report_id,
         question=request.question,
         conversation_id=request.conversation_id,
+        language=request.language or "en",
     )
     return BaseResponse(success=True, data=chat_res, message="Grounded response generated successfully.")

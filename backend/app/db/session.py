@@ -7,7 +7,7 @@
 
 import time
 from typing import Generator
-from sqlmodel import create_engine, Session, SQLModel
+from sqlmodel import create_engine, Session, SQLModel, text
 from backend.app.core.config.settings import settings
 from backend.app.core.logging import logger
 
@@ -73,6 +73,13 @@ def init_db(max_retries: int = 5, retry_delay: float = 3.0) -> None:
         try:
             logger.info(f"Connecting to database [attempt {attempt}/{max_retries}] at {safe_target}...")
             SQLModel.metadata.create_all(engine)
+            # Run idempotent schema migrations for added columns
+            try:
+                with engine.connect() as conn:
+                    conn.execute(text("ALTER TABLE clinical_notes ADD COLUMN title VARCHAR DEFAULT 'Clinical Note'"))
+                    conn.commit()
+            except Exception:
+                pass
             logger.info("Database connection verified and schemas initialized successfully.")
             # Seed baseline patient dataset if database is empty
             try:

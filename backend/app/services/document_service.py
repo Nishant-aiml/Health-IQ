@@ -31,7 +31,7 @@ class DocumentService:
     """
 
     async def submit_document_batch(
-        self, session: Session, files: List[Tuple[str, bytes]], doc_type: str = "lab_report"
+        self, session: Session, files: List[Tuple[str, bytes]], doc_type: str = "lab_report", user_id: int = 1
     ) -> Dict[str, Any]:
         """
         Submits a single or batch upload of document files.
@@ -40,6 +40,7 @@ class DocumentService:
             session: Active DB session.
             files: List of tuples `(filename, file_bytes)`.
             doc_type: "lab_report" or "prescription".
+            user_id: Patient ID.
 
         Returns:
             Dict containing `batch_id`, `job_ids`, and confirmation message.
@@ -47,13 +48,17 @@ class DocumentService:
         if not files:
             raise ValidationException("At least one document file must be uploaded.")
 
-        # Ensure default user profile exists
-        default_user = user_repository.get_by_name(session, "Demo Patient")
-        if not default_user:
-            default_user = User(name="Demo Patient", age=35, gender="male", pregnant=False, preferred_language="en")
-            session.add(default_user)
+        # Ensure valid user profile exists
+        target_user = user_repository.get_by_id(session, user_id)
+        if not target_user:
+            target_user = user_repository.get_by_name(session, "Demo Patient")
+        if not target_user:
+            target_user = User(name="Demo Patient", age=35, gender="male", pregnant=False, preferred_language="en")
+            session.add(target_user)
             session.commit()
-            session.refresh(default_user)
+            session.refresh(target_user)
+
+        effective_user_id = target_user.id
 
         batch_id = str(uuid.uuid4())
         created_job_ids: List[int] = []
@@ -64,7 +69,7 @@ class DocumentService:
 
             # Create Report entity
             report = Report(
-                user_id=default_user.id,
+                user_id=effective_user_id,
                 doc_type=doc_type,
                 source_filename=filename,
                 status=JobStage.QUEUED,
@@ -97,18 +102,17 @@ class DocumentService:
     def get_batch_status(self, session: Session, batch_id: str, job_ids: List[int]) -> List[Dict[str, Any]]:
         """
         Returns real-time status for a list of job IDs in a batch.
-
-        Inputs:
-            session: Active DB session.
-            batch_id: Batch identifier.
-            job_ids: List of job database IDs.
-
-        Returns:
-            List of status objects per job.
         """
         status_list: List[Dict[str, Any]] = []
 
-        for j_id in job_ids:
+        # If job_ids empty, fetch recent jobs
+        if not job_ids:
+            recent_jobs = list(session.exec(select(Job).order_by(Job.id.desc()).limit(10)).all())
+            target_job_ids = [j.id for j in recent_jobs if j.id is not None]
+        else:
+            target_job_ids = job_ids
+
+        for j_id in target_job_ids:
             job = job_repository.get_by_id(session, j_id)
             if not job:
                 continue

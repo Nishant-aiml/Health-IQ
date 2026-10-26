@@ -24,16 +24,20 @@ interface EvidenceViewerProps {
 
 const SOURCE_STYLES: Record<string, { badge: string; bar: string }> = {
   lab_result:        { badge: 'bg-teal-900/30 text-teal-300 border-teal-700/30', bar: 'bg-teal-400' },
+  trend:             { badge: 'bg-indigo-900/30 text-indigo-300 border-indigo-700/30', bar: 'bg-indigo-400' },
   trend_analysis:    { badge: 'bg-indigo-900/30 text-indigo-300 border-indigo-700/30', bar: 'bg-indigo-400' },
   recommendation:    { badge: 'bg-amber-900/30 text-amber-300 border-amber-700/30', bar: 'bg-amber-400' },
+  nutrition:         { badge: 'bg-emerald-900/30 text-emerald-300 border-emerald-700/30', bar: 'bg-emerald-400' },
   nutrition_plan:    { badge: 'bg-emerald-900/30 text-emerald-300 border-emerald-700/30', bar: 'bg-emerald-400' },
   clinical_summary:  { badge: 'bg-purple-900/30 text-purple-300 border-purple-700/30', bar: 'bg-purple-400' },
 };
 
 const FLOW_LABELS: Record<string, string> = {
   lab_result: 'Lab Result',
+  trend: 'Trend Analysis',
   trend_analysis: 'Trend Analysis',
   recommendation: 'Recommendation',
+  nutrition: 'Nutrition Plan',
   nutrition_plan: 'Nutrition Plan',
   clinical_summary: 'Clinical Summary',
 };
